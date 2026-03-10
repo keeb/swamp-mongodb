@@ -32,7 +32,7 @@ async function withClient(context, fn) {
 
 export const model = {
   type: "@keeb/mongodb",
-  version: "2026.03.04.1",
+  version: "2026.03.10.1",
   globalArguments: GlobalArgsSchema,
   resources: {
     queryResults: {
