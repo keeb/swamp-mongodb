@@ -69,9 +69,15 @@ export const model = {
                 .collection(col.name)
                 .estimatedDocumentCount();
             }
-            details[name] = { collectionCount: collections.length, collections: counts };
+            details[name] = {
+              collectionCount: collections.length,
+              collections: counts,
+            };
           }
-          return { defaultDatabase: defaultDb.databaseName, databases: details };
+          return {
+            defaultDatabase: defaultDb.databaseName,
+            databases: details,
+          };
         });
 
         const handle = await context.writeResource(
@@ -106,7 +112,10 @@ export const model = {
           const db = client.db(context.globalArgs.database);
           context.logger.info(
             "Querying {collection} with filter {filter}",
-            { collection: args.collection, filter: JSON.stringify(args.filter) },
+            {
+              collection: args.collection,
+              filter: JSON.stringify(args.filter),
+            },
           );
           return await db
             .collection(args.collection)
