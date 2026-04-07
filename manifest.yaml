@@ -1,7 +1,7 @@
 manifestVersion: 1
 name: "@keeb/mongodb"
-version: "2026.03.10.1"
-description: "MongoDB query integration (connectivity diagnostics, collection queries, user search, related record lookup)"
+version: "2026.04.06.1"
+description: "MongoDB integration (queries, inserts, connectivity diagnostics, user search, related record lookup)"
 repository: https://github.com/keeb/swamp-mongodb
 labels:
   - mongodb
@@ -9,3 +9,5 @@ labels:
   - nosql
 models:
   - mongodb_query.ts
+skills:
+  - mongodb
