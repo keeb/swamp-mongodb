@@ -32,7 +32,15 @@ async function withClient(context, fn) {
 
 export const model = {
   type: "@keeb/mongodb",
-  version: "2026.03.10.1",
+  version: "2026.03.29.1",
+  upgrades: [
+    {
+      fromVersion: "2026.03.10.1",
+      toVersion: "2026.03.29.1",
+      description: "Add insert method for writing documents",
+      upgradeAttributes: (old) => old,
+    },
+  ],
   globalArguments: GlobalArgsSchema,
   resources: {
     queryResults: {
@@ -180,6 +188,39 @@ export const model = {
             count: results.length,
             results,
           },
+        );
+        return { dataHandles: [handle] };
+      },
+    },
+    insert: {
+      description: "Insert one or more documents into a collection.",
+      arguments: z.object({
+        collection: z.string().describe("Collection name"),
+        documents: z
+          .array(z.record(z.string(), z.any()))
+          .describe("Array of documents to insert"),
+      }),
+      execute: async (args, context) => {
+        const results = await withClient(context, async (client) => {
+          const db = client.db(context.globalArgs.database);
+          context.logger.info(
+            "Inserting {count} document(s) into {collection}",
+            { count: args.documents.length, collection: args.collection },
+          );
+          const result = await db
+            .collection(args.collection)
+            .insertMany(args.documents);
+          return {
+            collection: args.collection,
+            insertedCount: result.insertedCount,
+            insertedIds: Object.values(result.insertedIds).map(String),
+          };
+        });
+
+        const handle = await context.writeResource(
+          "queryResults",
+          "queryResults",
+          results,
         );
         return { dataHandles: [handle] };
       },
